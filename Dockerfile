@@ -18,11 +18,16 @@ RUN \
 RUN \
   /opt/td-agent/embedded/bin/fluent-gem install fluent-plugin-cloudwatch fluent-plugin-elasticsearch
 
-COPY td-agent/etc /etc
+COPY td-agent/etc/td-agent/td-agent.conf td-agent.conf
 
+VOLUME ["/etc/td-agent"]
 EXPOSE 9880/tcp 5170/tcp 5160/udp 24224/tcp 24224/udp
 
 CMD \
+  if [ ! -e /etc/td-agent/td-agent.conf ]; then \
+    cp /td-agent.conf /etc/td-agent/td-agent.conf; \
+    rm -f /td-agent.conf; \
+  fi && \
   sed -i -e"s/YOUR_AWS_KEY_ID/${AWS_ACCESS_KEY_ID}/g" /etc/td-agent/td-agent.conf && \
   sed -i -e"s/YOUR_AWS_SECRET_KEY/${AWS_SECRET_ACCESS_KEY}/g" /etc/td-agent/td-agent.conf && \
   service td-agent start && \
