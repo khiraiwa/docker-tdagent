@@ -28,6 +28,7 @@ CMD \
     cp /td-agent.conf /etc/td-agent/td-agent.conf; \
     rm -f /td-agent.conf; \
   fi && \
+  sed -i -e"s|ELASTICSEARCH_HOST|${ELASTICSEARCH_HOST}|g" /etc/td-agent/td-agent.conf && \
   sed -i -e"s|YOUR_AWS_KEY_ID|${AWS_ACCESS_KEY_ID}|g" /etc/td-agent/td-agent.conf && \
   sed -i -e"s|YOUR_AWS_SECRET_KEY|${AWS_SECRET_ACCESS_KEY}|g" /etc/td-agent/td-agent.conf && \
   service td-agent start && \
